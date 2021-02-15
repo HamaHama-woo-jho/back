@@ -1,10 +1,42 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
-const { User } = require('../models');
+const { User, Chat, Post } = require('../models');
+const passport = require('passport');
+const { isLoggedIn, isNotLoggedIn } = require('./middlewares');
 
 const router = express.Router();
 
-router.post('/', async (req, res, next) => {  // POST /user/
+router.post('/login', isNotLoggedIn, (req, res, next) => { // middleware 확장하는 방법
+  passport.authenticate('local', (err, user, info) => {
+    if (err) {  // 서버 에러
+      console.error(err);
+      return next(err);
+    }
+    if (info) {  // 클라이언트 에러
+      return res.status(401).send(info.reason);
+    }
+    return req.login(user, async (loginError) => {
+      if (loginError) {
+        console.error(loginError);
+        return next(loginError);
+      }
+      const fullUserWithoutPassword = await User.findOne({
+        where: { id: user.id },
+        attributes: {
+          exclude: ['password']
+        },
+        include: [{
+          model: Post, // db associate 관계
+        }, {
+          model: Chat,
+        }]
+      })
+      return res.status(200).json(fullUserWithoutPassword);
+    })
+  })(req, res, next);
+});
+
+router.post('/', isNotLoggedIn, async (req, res, next) => {  // POST /user/
   try {
     const exUser = await User.findOne({
       where: {
@@ -42,6 +74,12 @@ router.post('/checkid', async (req, res, next) => {  // POST /user/checkid
     console.error(error);
     next(error);
   }
+});
+
+router.post('/logout', (req, res) => {
+  req.logout();
+  req.session.destroy();
+  res.send('ok');
 });
 
 module.exports = router;
