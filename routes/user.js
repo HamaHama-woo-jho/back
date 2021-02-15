@@ -5,7 +5,7 @@ const { User } = require('../models');
 const router = express.Router();
 
 router.post('/', async (req, res, next) => {  // POST /user/
-  try{
+  try {
     const exUser = await User.findOne({
       where: {
         userid: req.body.id,
@@ -27,8 +27,8 @@ router.post('/', async (req, res, next) => {  // POST /user/
   }
 });
 
-  router.post('/checkid', async (req, res, next) => {  // POST /user/checkid
-  try{
+router.post('/checkid', async (req, res, next) => {  // POST /user/checkid
+  try {
     const exUser = await User.findOne({
       where: {
         userid: req.body.id,
@@ -38,10 +38,10 @@ router.post('/', async (req, res, next) => {  // POST /user/
       return res.status(403).send('이미 사용중인 아이디입니다.');
     }
     res.status(200).send('아이디 사용 가능');
-  } catch(error) {
-      console.error(error);
-      next(error);
-    }
-  });
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
 
 module.exports = router;

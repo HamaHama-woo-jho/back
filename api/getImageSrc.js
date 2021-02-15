@@ -1,8 +1,8 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
 
-const getImageSrc = (url) => {
-  axios.get(url)
+const getImageSrc = async (url) => {
+  return axios.get(url)
     .then((response) => {
       const html = response.data;
       const $ = cheerio.load(html);
@@ -17,7 +17,7 @@ const getImageSrc = (url) => {
     .catch((err) => console.log(err));
 };
 
-const url = 'https://cookatmarket.com/ko/product/detail?product_id=576';
-const a = getImageSrc(url);
+// const url = 'https://cookatmarket.com/ko/product/detail?product_id=576';
+// const a = getImageSrc(url);
 
-// export default getImageSrc;
+module.exports = { getImageSrc };

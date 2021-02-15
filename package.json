@@ -1,7 +1,6 @@
 {
   "name": "hamahama",
   "version": "1.0.0",
-  "description": "",
   "main": "app.js",
   "dependencies": {
     "axios": "^0.21.1",
@@ -19,5 +18,15 @@
     "dev": "nodemon app"
   },
   "author": "hyein",
-  "license": "ISC"
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HamaHama-woo-jho/back.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/HamaHama-woo-jho/back/issues"
+  },
+  "homepage": "https://github.com/HamaHama-woo-jho/back#readme",
+  "description": ""
 }
