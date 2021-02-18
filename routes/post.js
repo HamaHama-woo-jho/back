@@ -30,17 +30,4 @@ router.post('/add', async (req, res, next) => {
   }
 });
 
-router.post('/load', async (req, res, next) => {
-  try {
-    console.log('포스트 데이터를 요청합니다.');
-    const page = req.body;
-    const postsData = await Post.findAll({ raw: true });
-    console.log(postsData);
-    res.status(201).send(postsData);
-  } catch (err) {
-    console.error(err);
-    next(err);
-  }
-});
-
 module.exports = router;
