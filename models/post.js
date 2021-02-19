@@ -39,10 +39,6 @@ module.exports = (sequelize, DataTypes) => {
     textArea: {
       type: DataTypes.TEXT,
       allowNull: true,
-    },
-    ownerid: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
     }
   }, {
     charset: 'utf8mb4',
@@ -51,7 +47,7 @@ module.exports = (sequelize, DataTypes) => {
   Post.associate = (db) => {
     db.Post.belongsTo(db.User);
     db.Post.hasMany(db.Chat);
-    db.Post.belongsToMany(db.User, { through: 'Chatroom', as: 'Participant' });
+    db.Post.belongsToMany(db.User, { through: 'Chatroom', as: 'Participants' });
     db.Post.belongsToMany(db.Hashtag, { through: 'PostHashtag' });
   };
   return Post;
