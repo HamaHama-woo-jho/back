@@ -21,6 +21,7 @@ router.post('/add', async (req, res, next) => {
       link: req.body.link,
       img: imgSrc,
       textArea: req.body.textArea,
+      isDivide: req.body.isDivide,
       UserId: req.user.id,
     });
     res.status(201).send(imgSrc);
