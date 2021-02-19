@@ -40,6 +40,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.TEXT,
       allowNull: true,
     },
+    isDivide: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+    },
     ownerid: {
       type: DataTypes.INTEGER,
       allowNull: false,
