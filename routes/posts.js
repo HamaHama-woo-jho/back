@@ -2,7 +2,7 @@ const express = require('express');
 
 const router = express.Router();
 const { Op } = require("sequelize");
-const { Post } = require('../models');
+const { Post, User } = require('../models');
 
 router.post('/', async (req, res, next) => {
   try {
@@ -16,6 +16,11 @@ router.post('/', async (req, res, next) => {
       },
       limit: 10,
       order: [['createdAt', 'DESC']],
+      include: [{
+        model: User,
+        as: 'Participants',
+        attributes: ['id', 'userid'],
+      }]
     });
     const lastId = postsData[postsData.length - 1].id;
     res.status(201).send({ posts: postsData, lastId });
