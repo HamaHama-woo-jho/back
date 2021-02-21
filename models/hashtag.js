@@ -1,9 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
   const Hashtag = sequelize.define('Hashtag', {
-    roomid: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
     content: {
       type: DataTypes.STRING(20),
       allowNull: false,

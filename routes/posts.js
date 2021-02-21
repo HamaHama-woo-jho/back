@@ -2,7 +2,7 @@ const express = require('express');
 
 const router = express.Router();
 const { Op } = require("sequelize");
-const { Post, User } = require('../models');
+const { Post, User, Hashtag } = require('../models');
 
 router.post('/', async (req, res, next) => {
   try {
@@ -24,6 +24,9 @@ router.post('/', async (req, res, next) => {
         model: User,
         as: 'Participants',
         attributes: ['id', 'userid'],
+      }, {
+        model: Hashtag,
+        attributes: ['id'],
       }]
     });
     const lastId = postsData[postsData.length - 1].id;
