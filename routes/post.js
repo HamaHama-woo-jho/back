@@ -1,7 +1,7 @@
 const express = require('express');
 
 const router = express.Router();
-const { Post } = require('../models');
+const { Post, User } = require('../models');
 const { getImageSrc } = require('../api/getImageSrc');
 const { isLoggedIn } = require('./middlewares');
 
@@ -25,7 +25,17 @@ router.post('/add', async (req, res, next) => {
       UserId: req.user.id,
     });
     await post.addParticipants(req.user.id);
-    res.status(201).send(imgSrc);
+    const target = await Post.findOne({
+      where: {
+        id: post.id,
+      },
+      include: [{
+        model: User,
+        as: 'Participants',
+        attributes: ['id', 'userid'],
+      }]
+    })
+    res.status(201).send(target);
   } catch (err) {
     console.error(err);
     next(err);
