@@ -27,8 +27,8 @@ router.post('/add', async (req, res, next) => {
     });
     if (hashtags) {
       const uniquetags = [...new Set(hashtags)];
-      const result = await Promise.all(uniquetags.map((tag) => Hashtag.findOrCreate({ 
-        where: {content: tag.slice(1).toLowerCase()}
+      const result = await Promise.all(uniquetags.map((tag) => Hashtag.findOrCreate({
+        where: { content: tag.slice(1).toLowerCase() }
       })));
       console.log('태그: ', hashtags);
       console.log('result: ', result);
@@ -45,7 +45,7 @@ router.post('/add', async (req, res, next) => {
         attributes: ['id', 'userid'],
       }, {
         model: Hashtag,
-        attributes: ['id'],
+        attributes: ['id', 'content'],
       }]
     })
     res.status(201).send(target);

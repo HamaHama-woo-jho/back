@@ -11,7 +11,7 @@ router.post('/', async (req, res, next) => {
       order: [['createdAt', 'DESC']],
       raw: true,
     }).then((p) => p.id) + 1;
-    console.log('마지막 페이지: ', await Post.findOne({order: [['createdAt', 'DESC']], raw: true}).then((p) => p.id));
+    console.log('마지막 페이지: ', await Post.findOne({ order: [['createdAt', 'DESC']], raw: true }).then((p) => p.id));
     const postsData = await Post.findAll({
       where: {
         id: {
@@ -26,7 +26,7 @@ router.post('/', async (req, res, next) => {
         attributes: ['id', 'userid'],
       }, {
         model: Hashtag,
-        attributes: ['id'],
+        attributes: ['id', 'content'],
       }]
     });
     const lastId = postsData[postsData.length - 1].id;
