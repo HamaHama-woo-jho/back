@@ -124,4 +124,21 @@ router.post('/report', isLoggedIn, async (req, res, next) => {
   }
 })
 
+router.post('/:postId/report', async (req, res, next) => {
+  try {
+    const reports = await Report.findAll({
+      where: { 
+        PostId: req.params.postId,
+      },
+      attributes: {
+        exclude: ['reason', 'createdAt', 'updatedAt', 'UserId']
+      },
+    });
+    res.status(200).json(reports);
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+})
+
 module.exports = router;
