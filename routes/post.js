@@ -1,7 +1,7 @@
 const express = require('express');
 
 const router = express.Router();
-const { Post, User, Hashtag } = require('../models');
+const { Post, User, Hashtag, Report } = require('../models');
 const { getImageSrc } = require('../api/getImageSrc');
 const { isLoggedIn } = require('./middlewares');
 
@@ -23,6 +23,7 @@ router.post('/add', async (req, res, next) => {
       img: imgSrc,
       textArea: req.body.textArea,
       isDivide: req.body.isDivide,
+      isReported: req.body.isReported,
       UserId: req.user.id,
     });
     if (hashtags) {
@@ -95,6 +96,28 @@ router.delete('/:postId', isLoggedIn, async (req, res, next) => {
       },
     });
     res.status(200).json({ postId: parseInt(req.params.postId, 10) });
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+})
+
+router.post('/report', isLoggedIn, async (req, res, next) => {
+  try {
+    const post = await Post.update({
+      isReported: true,
+    }, {
+      where: { 
+        id: req.body.postId,
+      },
+    });
+    await Report.create({
+      title: req.body.title,
+      reason: req.body.reason,
+      UserId: req.user.id,
+      PostId: req.body.postId,
+    })
+    res.status(200).json(post);
   } catch (error) {
     console.error(error);
     next(error);

@@ -14,11 +14,11 @@ module.exports = (sequelize, DataTypes) => {
     },
     from: {
       type: DataTypes.DATEONLY,
-      allowNull: false,
+      allowNull: true,
     },
     to: {
       type: DataTypes.DATEONLY,
-      allowNull: false,
+      allowNull: true,
     },
     location: {
       type: DataTypes.STRING,
@@ -37,13 +37,17 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
     },
     textArea: {
-      type: DataTypes.TEXT,
+      type: DataTypes.STRING(200),
       allowNull: true,
     },
     isDivide: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
     },
+    isReported: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+    }
   }, {
     charset: 'utf8mb4',
     collate: 'utf8mb4_general_ci', // 이모티콘 저장
@@ -53,6 +57,7 @@ module.exports = (sequelize, DataTypes) => {
     db.Post.hasMany(db.Chat);
     db.Post.belongsToMany(db.User, { through: 'Chatroom', as: 'Participants' });
     db.Post.belongsToMany(db.Hashtag, { through: 'PostHashtag' });
+    db.Post.hasMany(db.Report);
   };
   return Post;
 }

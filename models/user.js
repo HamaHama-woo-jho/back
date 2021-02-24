@@ -22,6 +22,7 @@ module.exports = (sequelize, DataTypes) => {
     db.User.hasMany(db.Post);
     db.User.hasMany(db.Chat);
     db.User.belongsToMany(db.Post, { through: 'Chatroom', as: 'Participated' });  // 중간: table 이름
+    db.User.hasMany(db.Report);
   };
   return User;
 }
