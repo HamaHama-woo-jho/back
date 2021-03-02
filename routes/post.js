@@ -31,8 +31,6 @@ router.post('/add', async (req, res, next) => {
       const result = await Promise.all(uniquetags.map((tag) => Hashtag.findOrCreate({
         where: { content: tag.slice(1).toLowerCase() }
       })));
-      console.log('태그: ', hashtags);
-      console.log('result: ', result);
       await post.addHashtags(result.map((v) => v[0]));
     }
     await post.addParticipants(req.user.id);
@@ -140,5 +138,59 @@ router.post('/:postId/report', async (req, res, next) => {
     next(error);
   }
 })
+
+router.patch('/modify', isLoggedIn, async (req, res, next) => {
+  try {
+    const imgSrc = await getImageSrc(req.body.link);
+    const newHashtags = req.body.textArea.match(/#[^\s]+/g);
+    const oldpost = await Post.findOne({
+      where: {
+        id: req.body.postId,
+      }
+    })
+    const oldHashtags = await oldpost.getHashtags();
+    console.log('*** oldhashtag: ', oldHashtags);
+    await Post.update({
+      title: req.body.title,
+      personnel: req.body.personnel,
+      curPersonnel: req.body.curPersonnel,
+      from: req.body.from,
+      to: req.body.to,
+      price: req.body.price,
+      location: req.body.location,
+      link: req.body.link,
+      img: imgSrc,
+      textArea: req.body.textArea,
+      isDivide: req.body.isDivide,
+    }, {
+      where: { id: req.body.postId },
+    });
+
+    // if (hashtags) {
+    //   const uniquetags = [...new Set(hashtags)];
+    //   const result = await Promise.all(uniquetags.map((tag) => Hashtag.findOrCreate({
+    //     where: { content: tag.slice(1).toLowerCase() }
+    //   })));
+    //   await post.addHashtags(result.map((v) => v[0]));
+    // }
+    const target = await Post.findOne({
+      where: {
+        id: req.body.postId,
+      },
+      include: [{
+        model: User,
+        as: 'Participants',
+        attributes: ['id', 'userid'],
+      }, {
+        model: Hashtag,
+        attributes: ['id', 'content'],
+      }]
+    })
+    res.status(200).send(target);
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
 
 module.exports = router;
